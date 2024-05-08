@@ -1,9 +1,9 @@
 #Importing the core package
-#import plotly
+import plotly
 import streamlit as st
 import pandas as pd
 import numpy as np
-#from plotly import express as px 
+from plotly import express as px 
 import sklearn
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
@@ -67,11 +67,8 @@ if choice=="Principal Component Analysis (PCA)":
     st.dataframe(pca_data)
     
     #Plotting the reduced data
-    fig=plt.figure()
-    sns.scatterplot(x=pca_data["PC1"],y=pca_data["PC2"],data=pca_data)
-    plt.xlabel("Principal Component 1")
-    plt.ylabel("Principal Component 2")
-    st.pyplot(fig)
+    fig=px.scatter(x=pca_data["PC1"],y=pca_data["PC2"],data_frame=pca_data,labels={"PC1":"Principal Component 1","PC2":"Principal Component 2"})
+    st.plotly_chart(fig)
     
 if choice=="t-Distributed Stochiatic Embedding (t-SNE)":
     #Creating a slider for perplexity and no. of iterations
@@ -84,6 +81,5 @@ if choice=="t-Distributed Stochiatic Embedding (t-SNE)":
     st.dataframe(tsne_data)
     
     #Plotting the scatter plot
-    fig=plt.figure()
-    sns.scatterplot(x="Column 1",y="Column 2",data=tsne_data)
-    st.pyplot(fig)
+    fig=px.scatter(x="Column 1",y="Column 2",data_frame=tsne_data)
+    st.plotly_chart(fig)
