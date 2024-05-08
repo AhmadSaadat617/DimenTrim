@@ -1,8 +1,9 @@
 #Importing the core package
+import plotly
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px 
+from plotly import express as px 
 import sklearn
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
