@@ -1,2 +1,6 @@
 plotly
 sklearn
+numpy
+pandas
+seaborn
+matplotlib
