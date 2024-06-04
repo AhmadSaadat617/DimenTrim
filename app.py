@@ -18,6 +18,9 @@ st.title("DimenTrim")
 st.markdown("<style>h1 {text-align: center;}</style>", unsafe_allow_html=True)
 
 
+#Setting up a sidebar
+selection=st.sidebar.selectbox("Select the dimensionality reduction technique:-",["Principal Component Analysis (PCA)","t-Distributed Stochiatic Embedding (t-SNE)"],index=None)
+
 #Taking the file as input from user
 file=pd.read_csv(st.file_uploader("Upload Your File Below:-"))
 
@@ -31,10 +34,33 @@ st.markdown(f"The file contains **{file.shape[0]} Rows** and **{file.shape[1]} C
 numerical_columns = file[file.select_dtypes(include=['number']).columns]
 categorical_columns = file[file.select_dtypes(include=['object', 'category']).columns]
 
-#Dimensionality Reduction technique
-choice=st.radio("**Which Dimensionality Reduction technique do you want to use:**",["Principal Component Analysis (PCA)","t-Distributed Stochiatic Embedding (t-SNE)"],index=None)
+#Storing the categoric variables
+categoric_variables=numerical_columns.columns
 
-if choice=="Principal Component Analysis (PCA)":
+#Plotting the dataset
+x=st.selectbox("Which visualization plot you want:-",options=["Scatter Plot","Histogram","Line Plot"],index=None)
+
+#Actual plotting 
+if x=="Scatter Plot":
+    x1=st.selectbox("Select X-axis",categoric_variables,index=None)
+    y1=st.selectbox("Select Y-axis",categoric_variables,index=None)
+    fig=plt.figure()
+    sns.scatterplot(x=x1,y=y1,data=numerical_columns)
+    st.plotly_chart(fig)
+elif x=="Histogram":
+    y1=st.selectbox("Select Y-axis",categoric_variables,index=None)
+    fig=plt.figure()
+    sns.distplot(numerical_columns[y1])
+    st.plotly_chart(fig)
+elif x=="Line Plot":
+    x1=st.selectbox("Select X-axis",categoric_variables,index=None)
+    y1=st.selectbox("Select Y-axis",categoric_variables,index=None)
+    fig=plt.figure()
+    sns.lineplot(x=x1,y=y1,data=numerical_columns)
+    st.plotly_chart(fig)
+    
+
+if selection=="Principal Component Analysis (PCA)":
     #Creating a PCA model for making the plot
     pca1=PCA(n_components=numerical_columns.shape[1])
     pca1.fit(numerical_columns)
@@ -70,7 +96,7 @@ if choice=="Principal Component Analysis (PCA)":
     fig=px.scatter(x=pca_data["PC1"],y=pca_data["PC2"],data_frame=pca_data,labels={"PC1":"Principal Component 1","PC2":"Principal Component 2"})
     st.plotly_chart(fig)
     
-if choice=="t-Distributed Stochiatic Embedding (t-SNE)":
+if selection=="t-Distributed Stochiatic Embedding (t-SNE)":
     #Creating a slider for perplexity and no. of iterations
     a=st.slider("Select a value of Perplexity",5,50,step=5)
     b=st.slider("Select the number of iterations", 1000,5000,step=500)
